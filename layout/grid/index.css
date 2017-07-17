@@ -1,0 +1,26 @@
+.Grid1{
+    display: flex;
+}
+.Grid-cell1{
+    flex: 1;
+}
+
+
+.Grid2 {
+    display: flex;
+}
+.Grid-cell2{
+    flex: 1;
+}
+.Grid-cell2.u-full {
+    flex: 0 0 100%;
+}
+.Grid-cell2.u-1of2 {
+    flex: 0 0 50%;
+}
+.Grid-cell.u-1of3 {
+  flex: 0 0 33.3333%;
+}
+.Grid-cell.u-1of4 {
+  flex: 0 0 25%;
+}

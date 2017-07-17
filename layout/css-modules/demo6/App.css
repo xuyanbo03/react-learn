@@ -1,0 +1,8 @@
+@value colors:'./colors.css';
+@value blue,red,green from colors;
+
+.title {
+    /*继承*/
+    composes:className from './another.css';
+    color: red;
+}

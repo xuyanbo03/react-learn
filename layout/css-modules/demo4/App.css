@@ -1,0 +1,9 @@
+.className {
+    background-color: blue;
+}
+
+.title {
+    /*继承*/
+    composes:className;
+    color: red;
+}

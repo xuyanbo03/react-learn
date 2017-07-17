@@ -1,0 +1,11 @@
+.title {
+    color: red;
+}
+
+/*
+:local(.title)===.title
+*/
+
+:global(.title) {
+    color: green;
+}
