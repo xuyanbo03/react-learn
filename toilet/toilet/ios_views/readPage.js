@@ -13,7 +13,6 @@ import Search from './read/search';
 import Topic from './read/topic';
 import Recommend from './read/recommend';
 import Category from './read/category';
-import List from './read/list';
 
 class Hr extends Component{
   render(){
@@ -53,13 +52,14 @@ class readPage extends Component {
         {
           this.state.isShow?
             <ScrollView style={styles.container}>
-              <Topic/>
+              <Topic data={this.state.recommendTopic} navigator={this.props.navigator}/>
               <Hr/>
-              <Recommend/>
+              <Recommend name="热门推荐" data={this.state.hotTopic} navigator={this.props.navigator}/>
               <Hr/>
-              <Category/>
+              <Category data={this.state.category} navigator={this.props.navigator}/>
               <Hr/>
-              <Recommend/>
+              <Recommend name="清新一刻" data={this.state.other} navigator={this.props.navigator}/>
+              <View style={{height:30}}/>
             </ScrollView>
             :null
         }
@@ -69,8 +69,27 @@ class readPage extends Component {
 
   //fetch data
   componentDidMount(){
-    this.setState({
-      isShow:true
+    let that=this;
+    Util.get('http://123.57.39.116:3000/data/read?type=config',function (data) {
+      if(data.status){
+        let obj=data.data;
+        let hotTopic=obj.hotTopic;
+        let recommendTopic=obj.recommendTopic;
+        let category=obj.category;
+        let other=obj.other;
+        that.setState({
+          isShow:true,
+          recommendTopic:recommendTopic,
+          hotTopic:hotTopic,
+          category:category,
+          other:other
+        });
+      }else{
+        alert('服务异常,正在紧急修复,请耐心等待');
+      }
+    },function (err) {
+      alert(err);
+      alert('服务异常,正在紧急修复,请耐心等待2');
     })
   }
 }

@@ -4,59 +4,64 @@ import {
   StyleSheet,
   Text,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native';
 
 import Util from '../util';
+import TWebView from '../twebview';
 
 export default class recommend extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      name:this.props.name,
+      data:this.props.data
+    };
+  }
   render() {
+    let views1=[];
+    let views2=[];
+    let data=this.state.data;
+    for (let i in data){
+      let item=(
+        <TouchableOpacity style={styles.img_item} key={i} onPress={this._showWebPage.bind(this,data[i].url,data[i].title)}>
+          <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:data[i].img}}/>
+          <Text style={styles.title} numberOfLines={2}>{data[i].title} </Text>
+        </TouchableOpacity>
+      );
+      if(i<4){
+        views1.push(item);
+      }else{
+        views2.push(item);
+      }
+    }
     return (
       <View style={styles.container}>
         <View>
-          <Text style={styles.text1}>热门推荐</Text>
+          <Text style={styles.text1}>{this.state.name}</Text>
         </View>
         <View style={styles.img_view}>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
+          {views1}
         </View>
         <View style={styles.img_view}>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
-          <View style={styles.img_item}>
-            <Image resizeModel="cover" style={[styles.img,styles.shadow]} source={{uri:''}}/>
-            <Text style={styles.title} numberOfLines={2}>标题标题标题标题标题标题标题标题标题标题标题标题标题</Text>
-          </View>
+          {views2}
         </View>
         <View>
           <Text style={styles.text2}>查看更多推荐&gt;</Text>
         </View>
       </View>
     )
+  }
+
+  _showWebPage(url,title){
+    this.props.navigator.push({
+      component:TWebView,
+      title:title,
+      passProps:{
+        url:url
+      }
+    })
   }
 }
 

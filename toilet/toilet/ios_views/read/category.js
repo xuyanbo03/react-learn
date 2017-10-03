@@ -3,44 +3,86 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
 
 import Util from '../util';
+import List from './list';
 
 export default class category extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      data:this.props.data,
+      navigator:this.props.navigator
+    };
+  }
   render() {
+    let views1=[];
+    let views2=[];
+    let data=this.state.data;
+    for (let i in data){
+      let items=(
+        <View style={styles.row_item} key={i}>
+          <TouchableOpacity style={styles.item} onPress={this._goToList.bind(this)}>
+            <Text style={styles.title}>{data[i].text}</Text>
+          </TouchableOpacity>
+        </View>
+      );
+      if(i<2){
+        views1.push(items);
+      }else{
+        views2.push(items);
+      }
+    }
     return (
       <View style={styles.container}>
         <Text style={styles.text1}>
           分类
         </Text>
         <View style={styles.row}>
-          <View style={styles.row_item}>
-            <View style={styles.item}>
-              <Text style={styles.title}>互联网</Text>
-            </View>
-          </View>
-          <View style={styles.row_item}>
-            <View style={styles.item}>
-              <Text style={styles.title}>互联网</Text>
-            </View>
-          </View>
+          {views1}
         </View>
         <View style={styles.row}>
-          <View style={styles.row_item}>
-            <View style={styles.item}>
-              <Text style={styles.title}>互联网</Text>
-            </View>
-          </View>
-          <View style={styles.row_item}>
-            <View style={styles.item}>
-              <Text style={styles.title}>互联网</Text>
-            </View>
-          </View>
+          {views2}
         </View>
       </View>
     )
+  }
+
+  _goToList(name){
+    let type=this._getType(name);
+    let url='http://123.57.39.116:3000/data/read?type='+type;
+    this.state.navigator.push({
+      component:List,
+      title:name,
+      barTintColor:'#FFF',
+      passProps:{
+        url:url
+      }
+    });
+  }
+  _getType(name){
+    let type='it';
+    switch (name){
+      case '互联网':
+        type='it';
+        break;
+      case '笑话':
+        type='cookies';
+        break;
+      case '管理':
+        type='manager';
+        break;
+      case '散文':
+        type='sanwen';
+        break;
+      default:
+        type='it';
+        break;
+    }
+    return type;
   }
 }
 

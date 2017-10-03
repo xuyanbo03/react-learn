@@ -6,20 +6,20 @@ import {
   View
 } from 'react-native';
 
+import TWebView from './twebview';
+
 export default class weatherPage extends Component {
   render() {
     return (
-      <View>
-        <Text style={styles.text}>
-          天气
-        </Text>
+      <View style={styles.container}>
+        <TWebView url="http://localhost:8081/ios_views/html/weather.html"/>
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 60
+  container: {
+    flex:1
   }
 });
