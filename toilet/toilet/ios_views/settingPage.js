@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
   AppRegistry,
   StyleSheet,
@@ -6,20 +6,20 @@ import {
   View
 } from 'react-native';
 
-export default class settingPage extends Component{
-  render(){
-      return(
-          <View>
-              <Text style={styles.text}>
-                  设置
-              </Text>
-          </View>
-      )
+export default class settingPage extends Component {
+  render() {
+    return (
+      <View>
+        <Text style={styles.text}>
+          设置
+        </Text>
+      </View>
+    )
   }
 }
 
 const styles = StyleSheet.create({
-    text:{
-        fontSize:60
-    }
+  text: {
+    fontSize: 60
+  }
 });

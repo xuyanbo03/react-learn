@@ -6,12 +6,12 @@ import {
   View
 } from 'react-native';
 
-export default class weatherPage extends Component {
+export default class list extends Component {
   render() {
     return (
       <View>
         <Text style={styles.text}>
-          天气
+          阅读
         </Text>
       </View>
     )
