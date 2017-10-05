@@ -4,29 +4,45 @@
  * @flow
  */
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  TabBarIOS
 } from 'react-native';
 
+import List from './app/creation/index';
+import Edit from './app/edit/index';
+import Account from './app/account/index';
+
+
 export default class dogApp extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedTab: 'list'
+    }
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
-      </View>
+      <TabBarIOS tintColor='#ee735c'>
+        <Icon.TabBarItem iconName='ios-videocam-outline' selectedIconName='ios-videocam'
+                         selected={this.state.selectedTab === 'list'} onPress={()=>{this.setState({selectedTab:'list'})}}>
+          <List/>
+        </Icon.TabBarItem>
+        <Icon.TabBarItem iconName='ios-recording-outline' selectedIconName='ios-recording'
+                         selected={this.state.selectedTab === 'edit'} onPress={()=>{this.setState({selectedTab:'edit'})}}>
+          <Edit/>
+        </Icon.TabBarItem>
+        <Icon.TabBarItem iconName='ios-more-outline' selectedIconName='ios-more'
+                         selected={this.state.selectedTab === 'account'} onPress={()=>{this.setState({selectedTab:'account'})}}>
+          <Account/>
+        </Icon.TabBarItem>
+      </TabBarIOS>
     );
   }
 }
