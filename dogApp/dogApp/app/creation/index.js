@@ -132,7 +132,7 @@ export default class List extends Component {
   }
 
   _renderRow(row) {
-    return <Item key={row._id} onSelect={()=>this._loadPage(row)} row={row}/>;
+    return <Item key={row._id} onSelect={() => this._loadPage(row)} row={row}/>;
   }
 
   _fetchData(page) {
@@ -173,7 +173,7 @@ export default class List extends Component {
                 dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
               })
             }
-          }, 1000);
+          }, 200);
         }
       })
       .catch((error) => {
@@ -226,12 +226,12 @@ export default class List extends Component {
     );
   }
 
-  _loadPage(row){
+  _loadPage(row) {
     this.props.navigator.push({
-      name:'detail',
-      component:Detail,
-      params:{
-        data:row
+      name: 'detail',
+      component: Detail,
+      params: {
+        data: row
       }
     })
   }
