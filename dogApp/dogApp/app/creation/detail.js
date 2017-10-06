@@ -52,8 +52,8 @@ export default class Detail extends Component {
       //comment modal
       animationType: 'none',
       modalVisible: false,
-      isSending:false,
-      content:''
+      isSending: false,
+      content: ''
     }
   }
 
@@ -70,10 +70,13 @@ export default class Detail extends Component {
         </View>
         <Text>{data.title}</Text>
         <View style={styles.videoBox}>
-          <Video ref='videoPlayer' source={{uri: data.video}} style={styles.video} volume={3} paused={this.state.paused}
+          <Video ref={(ref) => {
+            this.player = ref
+          }} source={{uri: data.video}} style={styles.video} volume={3} paused={this.state.paused}
                  rate={this.state.rate} muted={this.state.muted} resizeMode={this.state.resizeMode}
-                 repeat={this.state.repeat} onLoadStart={this._onLoadStart} onLoad={this._onLoad}
-                 onProgress={this._onProgress} onEnd={this._onEnd} onError={this._onError}/>
+                 repeat={this.state.repeat} onLoadStart={this._onLoadStart.bind(this)} onLoad={this._onLoad.bind(this)}
+                 onProgress={this._onProgress.bind(this)} onEnd={this._onEnd.bind(this)}
+                 onError={this._onError.bind(this)}/>
 
           {
             !this.state.videoOk && <Text style={styles.failText}>视频出错！很抱歉</Text>
@@ -161,19 +164,20 @@ export default class Detail extends Component {
   }
 
   _onProgress(data) {
-    if (!this.state.videoLoaded) {
-      this.setState({
-        videoLoaded: true
-      })
-    }
+    // if (!this.state.videoLoaded) {
+    //   this.setState({
+    //     videoLoaded: true
+    //   })
+    // }
+    //console.log(data);
 
     let duration = data.playableDuration;
     let currentTime = data.currentTime;
     let percent = Number((currentTime / duration).toFixed(2));
     let newState = {
-      videoProgress: percent,
-      videoTotal: Number(duration.toFixed(2)),
-      currentTime: Number(currentTime.toFixed(2))
+      videoTotal: duration,
+      currentTime: Number(data.currentTime.toFixed(2)),
+      videoProgress: percent
     };
     if (!this.state.videoLoaded) {
       newState.videoLoaded = true;
@@ -181,7 +185,12 @@ export default class Detail extends Component {
     if (!this.state.playing) {
       newState.playing = true;
     }
-    this.setState(newState)
+    this.setState(newState);
+    // if(currentTime===duration){
+    //   this.setState({
+    //     playing:false
+    //   })
+    // }
   }
 
   _onEnd() {
@@ -198,7 +207,8 @@ export default class Detail extends Component {
   }
 
   _replay() {
-    this.refs.videoPlayer.seek(0)
+    // this.refs.videoPlayer.seek(0)
+    this.player.seek(0)
   }
 
   _pause() {
@@ -333,54 +343,54 @@ export default class Detail extends Component {
   }
 
   _submit() {
-    let that=this;
-    if(!this.state.content){
+    let that = this;
+    if (!this.state.content) {
       return AlertIOS.alert('留言不能为空！')
     }
-    if(this.state.isSending){
+    if (this.state.isSending) {
       return AlertIOS.alert('正在评论中！')
     }
 
     this.setState({
-      isSending:true
-    },function () {
-      let body={
-        accessToken:'abc',
-        creation:'123',
-        content:that.state.content
+      isSending: true
+    }, function () {
+      let body = {
+        accessToken: 'abc',
+        creation: '123',
+        content: this.state.content
       };
-      let url=config.api.base+config.api.comment;
+      let url = config.api.base + config.api.comment;
 
-      request.post(url,body)
+      request.post(url, body)
         .then(function (data) {
-          if (data&&data.success){
-            let items=cachedResults.items.slice();
-            let content=that.state.content;
+          if (data && data.success) {
+            let items = cachedResults.items.slice();
+            let content = that.state.content;
 
-            items=[{
-              content:content,
-              replyBy:{
-                avatar:'http://dummyimage.com/640x640/6bd469)',
-                nickname:'nickname'
+            items = [{
+              content: content,
+              replyBy: {
+                avatar: 'http://dummyimage.com/640x640/6bd469)',
+                nickname: 'nickname'
               }
             }].concat(items);
 
-            cachedResults.items=items;
-            cachedResults.total+=1;
+            cachedResults.items = items;
+            cachedResults.total += 1;
 
             that.setState({
-              content:'',
-              isSending:false,
-              dataSource:that.state.dataSource.cloneWithRows(cachedResults.items)
+              content: '',
+              isSending: false,
+              dataSource: that.state.dataSource.cloneWithRows(cachedResults.items)
             });
 
             that._setModalVisible(false);
           }
         })
-        .catch((err)=>{
+        .catch((err) => {
           console.log(err);
           that.setState({
-            isSending:false
+            isSending: false
           });
           that._setModalVisible(false);
           AlertIOS.alert('留言失败，稍后重试！');
@@ -608,15 +618,15 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: '#ee753c'
   },
-  submitBtn:{
-    width:width-20,
-    padding:16,
-    marginTop:20,
-    marginBottom:20,
-    borderWidth:1,
-    borderRadius:4,
-    borderColor:'#ee735c',
-    fontSize:18,
-    color:'#ee735c'
+  submitBtn: {
+    width: width - 20,
+    padding: 16,
+    marginTop: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderRadius: 4,
+    borderColor: '#ee735c',
+    fontSize: 18,
+    color: '#ee735c'
   }
 });
